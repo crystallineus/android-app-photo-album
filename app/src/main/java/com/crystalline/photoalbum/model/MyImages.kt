@@ -1,4 +1,4 @@
-package com.crystalline.photoalbum
+package com.crystalline.photoalbum.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
