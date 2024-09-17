@@ -5,9 +5,13 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.ViewModelProvider
 import com.crystalline.photoalbum.R
+import com.crystalline.photoalbum.viewmodel.MyImagesViewModel
 
 class MainActivity : AppCompatActivity() {
+    lateinit var myImagesViewModel: MyImagesViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -17,5 +21,10 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        myImagesViewModel = ViewModelProvider(this)[MyImagesViewModel::class.java]
+        myImagesViewModel.getAll().observe(this, {
+            // update UI
+        })
     }
 }
