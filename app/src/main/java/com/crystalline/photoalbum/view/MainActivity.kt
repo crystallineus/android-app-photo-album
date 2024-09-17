@@ -7,10 +7,12 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import com.crystalline.photoalbum.R
+import com.crystalline.photoalbum.databinding.ActivityMainBinding
 import com.crystalline.photoalbum.viewmodel.MyImagesViewModel
 
 class MainActivity : AppCompatActivity() {
     lateinit var myImagesViewModel: MyImagesViewModel
+    lateinit var mainBinding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,5 +28,9 @@ class MainActivity : AppCompatActivity() {
         myImagesViewModel.getAll().observe(this, {
             // update UI
         })
+
+        mainBinding.floatingActionButton.setOnClickListener {
+            // open AddImageActivity
+        }
     }
 }
