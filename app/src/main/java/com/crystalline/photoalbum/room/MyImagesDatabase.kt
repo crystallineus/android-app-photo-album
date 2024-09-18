@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.crystalline.photoalbum.model.MyImages
 
-@Database(entities = [MyImages::class], version = 1)
+@Database(entities = [MyImages::class], version = 1, exportSchema = false)
 abstract class MyImagesDatabase : RoomDatabase() {
     abstract fun myImagesDao() : MyImagesDao
 

@@ -4,11 +4,11 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "my_images")
-class MyImages (
-    val imageTitle : String,
-    val imageDescription : String,
-    var imageAsString : String
+data class MyImages(
+    var imageTitle: String,
+    var imageDescription: String,
+    var imageAsString: String
 ) {
     @PrimaryKey(autoGenerate = true)
-    val imageId = 0
+    var imageId: Int = 0 // Changed to var for Room to update
 }
