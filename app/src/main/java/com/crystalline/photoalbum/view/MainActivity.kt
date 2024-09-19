@@ -7,13 +7,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.crystalline.photoalbum.R
+import com.crystalline.photoalbum.adapter.MyImagesAdapter
 import com.crystalline.photoalbum.databinding.ActivityMainBinding
 import com.crystalline.photoalbum.viewmodel.MyImagesViewModel
 
 class MainActivity : AppCompatActivity() {
     lateinit var myImagesViewModel: MyImagesViewModel
     lateinit var mainBinding: ActivityMainBinding
+    lateinit var myImagesAdapter: MyImagesAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,8 +25,14 @@ class MainActivity : AppCompatActivity() {
         setContentView(mainBinding.root)
 
         myImagesViewModel = ViewModelProvider(this)[MyImagesViewModel::class.java]
-        myImagesViewModel.getAll().observe(this, {
+
+        mainBinding.recyclerView.layoutManager = LinearLayoutManager(this)
+        myImagesAdapter = MyImagesAdapter()
+        mainBinding.recyclerView.adapter = myImagesAdapter
+
+        myImagesViewModel.getAll().observe(this, { images ->
             // update UI
+            myImagesAdapter.setImage(images)
         })
 
         mainBinding.floatingActionButton.setOnClickListener {
