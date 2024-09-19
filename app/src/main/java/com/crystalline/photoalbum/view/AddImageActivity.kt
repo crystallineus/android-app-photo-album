@@ -7,36 +7,30 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import com.crystalline.photoalbum.R
+import com.crystalline.photoalbum.databinding.ActivityAddImageBinding
 import com.crystalline.photoalbum.databinding.ActivityMainBinding
 import com.crystalline.photoalbum.viewmodel.MyImagesViewModel
 
 class AddImageActivity : AppCompatActivity() {
 
-    lateinit var myImagesViewModel: MyImagesViewModel
-    lateinit var mainBinding: ActivityMainBinding
+    lateinit var addImageBinding: ActivityAddImageBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        mainBinding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(mainBinding.root)
+        addImageBinding = ActivityAddImageBinding.inflate(layoutInflater)
+        setContentView(addImageBinding.root)
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+        addImageBinding.imageViewAddImage.setOnClickListener {
+
         }
 
-        myImagesViewModel = ViewModelProvider(this)[MyImagesViewModel::class.java]
-        myImagesViewModel.getAll().observe(this, { image->
-            // update UI
-        })
+        addImageBinding.buttonAdd.setOnClickListener {
 
-        mainBinding.floatingActionButton.setOnClickListener {
-            // open AddImageActivity
+        }
 
-            val intent = Intent(this, AddImageActivity::class.java)
-            startActivity(intent)
+        addImageBinding.toolbarAddImage.setNavigationOnClickListener {
+            finish()
         }
     }
 }
