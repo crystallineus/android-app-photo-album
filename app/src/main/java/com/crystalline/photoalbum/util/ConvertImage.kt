@@ -18,10 +18,9 @@ class ConvertImage {
                     resizeImage(bitmap, 0.1)
                 } else {
                     resizeImage(bitmap, 0.5)
-                } else {
-                    Base64.encodeToString(byteArray, Base64.DEFAULT)
                 }
 
+                Base64.encodeToString(byteArray, Base64.DEFAULT)
                 return imageAsString
             } else {
                 return null

@@ -8,25 +8,37 @@ import android.graphics.ImageDecoder
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
 import com.crystalline.photoalbum.databinding.ActivityAddImageBinding
+import com.crystalline.photoalbum.model.MyImages
 import com.crystalline.photoalbum.util.ControlPermission
+import com.crystalline.photoalbum.util.ConvertImage
+import com.crystalline.photoalbum.viewmodel.MyImagesViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class AddImageActivity : AppCompatActivity() {
 
     lateinit var addImageBinding: ActivityAddImageBinding
     lateinit var activityResultLaucherForSelectImage : ActivityResultLauncher<Intent>
     lateinit var selectedImage: Bitmap
+    lateinit var myImagesViewModel : MyImagesViewModel
+    var control = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         addImageBinding = ActivityAddImageBinding.inflate(layoutInflater)
         setContentView(addImageBinding.root)
+
+        myImagesViewModel = ViewModelProvider(this)[MyImagesViewModel::class.java]
 
         registerActivityForSelectImage()
 
@@ -54,7 +66,27 @@ class AddImageActivity : AppCompatActivity() {
         }
 
         addImageBinding.buttonAdd.setOnClickListener {
+            if (control) {
 
+                addImageBinding.buttonAdd.text = "Uploading... Please Wait"
+                addImageBinding.buttonAdd.isEnabled = false
+
+                GlobalScope.launch(Dispatchers.IO) {
+                    val title = addImageBinding.editTextAddTitle.text.toString()
+                    val description = addImageBinding.editTextAddDescription.text.toString()
+                    val imagesAsString = ConvertImage.convertToString(selectedImage)
+
+                    if (imagesAsString != null) {
+                        myImagesViewModel.insert(MyImages(title, description, imagesAsString))
+                        control = false
+                        finish()
+                    } else {
+                        Toast.makeText(applicationContext, "There is a problem, please select a new image", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            } else {
+                Toast.makeText(applicationContext, "Please select a photo", Toast.LENGTH_SHORT).show()
+            }
         }
 
         addImageBinding.toolbarAddImage.setNavigationOnClickListener {
@@ -79,6 +111,7 @@ class AddImageActivity : AppCompatActivity() {
                     }
 
                     addImageBinding.imageViewAddImage.setImageBitmap(selectedImage)
+                    control = true
                 }
             }
         }
