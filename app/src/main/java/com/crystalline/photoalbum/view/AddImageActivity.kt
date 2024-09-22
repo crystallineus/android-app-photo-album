@@ -3,6 +3,8 @@ package com.crystalline.photoalbum.view
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.ImageDecoder
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
@@ -18,6 +20,7 @@ class AddImageActivity : AppCompatActivity() {
 
     lateinit var addImageBinding: ActivityAddImageBinding
     lateinit var activityResultLaucherForSelectImage : ActivityResultLauncher<Intent>
+    lateinit var selectedImage: Bitmap
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,8 +63,24 @@ class AddImageActivity : AppCompatActivity() {
     }
 
     fun registerActivityForSelectImage() {
-        activityResultLaucherForSelectImage = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            // result of the intent
+        activityResultLaucherForSelectImage = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            val resultCode = result.resultCode
+            val imageData = result.data
+
+            if (resultCode == RESULT_OK && imageData != null) {
+                val imageUri = imageData.data
+
+                imageUri?.let {
+                    selectedImage = if (Build.VERSION.SDK_INT >= 28) {
+                        val imageSource = ImageDecoder.createSource(this.contentResolver, it)
+                        ImageDecoder.decodeBitmap(imageSource)
+                    } else {
+                        MediaStore.Images.Media.getBitmap(this.contentResolver, imageUri)
+                    }
+
+                    addImageBinding.imageViewAddImage.setImageBitmap(selectedImage)
+                }
+            }
         }
     }
 
