@@ -7,7 +7,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.crystalline.photoalbum.R
 import com.crystalline.photoalbum.adapter.MyImagesAdapter
 import com.crystalline.photoalbum.databinding.ActivityMainBinding
@@ -40,5 +42,21 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, AddImageActivity::class.java)
             startActivity(intent)
         }
+
+        ItemTouchHelper(object: ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                TODO("Not yet implemented")
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                //dialog message or snackbar message
+                myImagesViewModel.delete(myImagesAdapter.returnItemAtGivenPosition(viewHolder.adapterPosition))
+            }
+
+        }).attachToRecyclerView(mainBinding.recyclerView)
     }
 }

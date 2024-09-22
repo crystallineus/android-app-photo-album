@@ -35,4 +35,8 @@ class MyImagesAdapter: RecyclerView.Adapter<MyImagesAdapter.MyImagesViewHolder>(
             itemBinding.imageView.setImageBitmap(imageAsBitmap)
         }
     }
+
+    fun returnItemAtGivenPosition(position: Int) : MyImages {
+        return imageList[position]
+    }
 }
