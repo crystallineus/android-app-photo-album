@@ -33,4 +33,8 @@ class MyImagesViewModel(application: Application) : AndroidViewModel(application
     fun getAll() : LiveData<List<MyImages>> {
         return imagesList
     }
+
+    suspend fun getItemById(id: Int):MyImages {
+        return repository.getItemById(id)
+    }
 }

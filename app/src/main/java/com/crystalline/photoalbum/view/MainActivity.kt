@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
         myImagesViewModel = ViewModelProvider(this)[MyImagesViewModel::class.java]
 
         mainBinding.recyclerView.layoutManager = LinearLayoutManager(this)
-        myImagesAdapter = MyImagesAdapter()
+        myImagesAdapter = MyImagesAdapter(this)
         mainBinding.recyclerView.adapter = myImagesAdapter
 
         myImagesViewModel.getAll().observe(this, { images ->

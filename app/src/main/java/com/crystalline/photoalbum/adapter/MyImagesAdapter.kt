@@ -1,13 +1,16 @@
 package com.crystalline.photoalbum.adapter
 
+import android.app.Activity
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.crystalline.photoalbum.databinding.ImageItemBinding
 import com.crystalline.photoalbum.model.MyImages
 import com.crystalline.photoalbum.util.ConvertImage
+import com.crystalline.photoalbum.view.UpdateImageActivity
 
-class MyImagesAdapter: RecyclerView.Adapter<MyImagesAdapter.MyImagesViewHolder>() {
+class MyImagesAdapter(val activity: Activity): RecyclerView.Adapter<MyImagesAdapter.MyImagesViewHolder>() {
     var imageList : List<MyImages> = ArrayList()
 
     fun setImage(images : List<MyImages>) {
@@ -33,6 +36,12 @@ class MyImagesAdapter: RecyclerView.Adapter<MyImagesAdapter.MyImagesViewHolder>(
             itemBinding.textViewDescription.text = myImage.imageDescription
             val imageAsBitmap = ConvertImage.convertToBitmap(myImage.imageAsString)
             itemBinding.imageView.setImageBitmap(imageAsBitmap)
+
+            itemBinding.cardView.setOnClickListener {
+                val intent = Intent(activity, UpdateImageActivity::class.java)
+                intent.putExtra("id", myImage.imageId)
+                activity.startActivity(intent)
+            }
         }
     }
 
